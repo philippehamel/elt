@@ -40,15 +40,17 @@ def test_db_connection(config):
             "-c",
             "SELECT 1",
         ]
-        subprocess.run(
+        result = subprocess.run(
             test_command,
             env=dict(PGPASSWORD=config["password"]),
             check=True,
             capture_output=True,
+            text=True,
         )
+        print(f"Successfully connected to {config['dbname']}")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Database connection failed: {e.stderr.decode()}")
+        print(f"Database connection failed: {e.stderr}")
         return False
 
 
@@ -75,8 +77,8 @@ dump_command = [
     "-d",
     source_config["dbname"],
     "-f",
-    "/app/data_dump.sql",  # Use absolute path with WORKDIR
-    "-w",  # Do not prompt for password
+    "/app/data/data_dump.sql",
+    "-w",
 ]
 
 load_command = [
@@ -89,8 +91,9 @@ load_command = [
     destination_config["dbname"],
     "-a",
     "-f",
-    "/app/data_dump.sql",  # Use absolute path with WORKDIR
+    "/app/data/data_dump.sql",
 ]
+
 source_subprocess_env = dict(PGPASSWORD=source_config["password"])
 destination_subprocess_env = dict(PGPASSWORD=destination_config["password"])
 
