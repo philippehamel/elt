@@ -3,7 +3,7 @@ import time
 import sys
 
 
-def wait_for_postgres(host, max_retries=5, delay=5):
+def wait_for_postgres(host, max_retries=10, delay=10):
     """
     Wait for PostgreSQL to be ready.
 
@@ -123,7 +123,7 @@ try:
     subprocess.run(
         load_command, env=destination_subprocess_env, check=True, capture_output=True
     )
-    print("dump completed successfully")
+    print("load completed successfully")
 except subprocess.CalledProcessError as e:
     print(f"load failed: {e.stderr.decode()}")
     sys.exit(1)
