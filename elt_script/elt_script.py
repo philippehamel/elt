@@ -55,43 +55,34 @@ def test_db_connection(config):
 
 
 source_config = {
-    "dbname": "source_db",
-    "user": "postgres",
-    "password": "postgres",
-    "host": "source_db",
+    'dbname': 'source_db',
+    'user': 'postgres',
+    'password': 'secret',
+    'host': 'source_postgres'
 }
 
 destination_config = {
-    "dbname": "destination_db",
-    "user": "postgres",
-    "password": "postgres",
-    "host": "destination_db",
+    'dbname': 'destination_db',
+    'user': 'postgres',
+    'password': 'secret',
+    'host': 'destination_postgres'
 }
 
 dump_command = [
-    "pg_dump",
-    "-h",
-    source_config["host"],
-    "-U",
-    source_config["user"],
-    "-d",
-    source_config["dbname"],
-    "-f",
-    "/app/data/data_dump.sql",
-    "-w",
+    'pg_dump',
+    '-h', source_config['host'],
+    '-U', source_config['user'],
+    '-d', source_config['dbname'],
+    '-f', 'data_dump.sql',
+    '-w'
 ]
 
 load_command = [
-    "psql",
-    "-h",
-    destination_config["host"],
-    "-U",
-    destination_config["user"],
-    "-d",
-    destination_config["dbname"],
-    "-a",
-    "-f",
-    "/app/data/data_dump.sql",
+    'psql',
+    '-h', destination_config['host'],
+    '-U', destination_config['user'],
+    '-d', destination_config['dbname'],
+    '-a', '-f', 'data_dump.sql'
 ]
 
 source_subprocess_env = dict(PGPASSWORD=source_config["password"])
@@ -130,3 +121,5 @@ try:
 except subprocess.CalledProcessError as e:
     print(f"load failed: {e.stderr.decode()}")
     sys.exit(1)
+
+print("data transfer completed successfully")
