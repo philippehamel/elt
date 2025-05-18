@@ -3,12 +3,26 @@ version: 2
 sources:
   - name: destination_db
     description: "Raw data from the destination PostgreSQL database."
-    database: destination_db
     schema: public
     tables:
       - name: films
-        description: "List of films."
+        description: "Details about films."
+        tests:
+          - not_null:
+              column_name: film_id
+          - unique:
+              column_name: film_id
       - name: actors
-        description: "List of actors."
+        description: "Details about actors."
+        tests:
+          - not_null:
+              column_name: actor_id
+          - unique:
+              column_name: actor_id
       - name: film_actors
         description: "Mapping between films and actors."
+        tests:
+          - not_null:
+              column_name: film_id
+          - not_null:
+              column_name: actor_id
